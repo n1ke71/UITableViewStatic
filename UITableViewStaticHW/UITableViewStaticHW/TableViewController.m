@@ -8,18 +8,19 @@
 
 #import "TableViewController.h"
 
-static NSString* kSettingsFirstName    = @"FirstName"    ;
-static NSString* kSettingsLastName     = @"LastName "    ;
-static NSString* kSettingsLogin        = @"Login"        ;
-static NSString* kSettingsPassword     = @"Password "    ;
-static NSString* kSettingsAge          = @"Age "         ;
-static NSString* kSettingsPhoneNumber  = @"PhoneNumber"  ;
-static NSString* kSettingsEmail        = @"Email "       ;
-static NSString* kSettingsShadows      = @"Shadows"      ;
-static NSString* kSettingsDetalization = @"Detalization ";
-static NSString* kSettingsVolume       = @"Volume "      ;
-static NSString* kSettingsMusic        = @"Music "       ;
-static NSString* kSettingsComplexity   = @"Complexity "  ;
+static NSString* kSettingsFirstName       = @"FirstName"     ;
+static NSString* kSettingsLastName        = @"LastName "     ;
+static NSString* kSettingsLogin           = @"Login"         ;
+static NSString* kSettingsPassword        = @"Password "     ;
+static NSString* kSettingsAge             = @"Age "          ;
+static NSString* kSettingsPhoneNumber     = @"PhoneNumber"   ;
+static NSString* kSettingsEmail           = @"Email "        ;
+static NSString* kSettingsShadows         = @"Shadows"       ;
+static NSString* kSettingsDetalization    = @"Detalization " ;
+static NSString* kSettingsVolume          = @"Volume "       ;
+static NSString* kSettingsMusic           = @"Music "        ;
+static NSString* kSettingsComplexity      = @"Complexity "   ;
+static NSString* kSettingsParentControl   = @"ParentControl ";
 
 @interface TableViewController ()
 
@@ -30,8 +31,8 @@ static NSString* kSettingsComplexity   = @"Complexity "  ;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-
-    [self loadSavings];
+    
+    [self loadSettings];
    
 }
 
@@ -46,23 +47,15 @@ static NSString* kSettingsComplexity   = @"Complexity "  ;
     
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
     
-    [userDefaults setBool:self.shadowsSwitch.isOn  forKey:kSettingsShadows];
+    [userDefaults setBool:self.shadowsSwitch.isOn                           forKey:kSettingsShadows];
     [userDefaults setInteger:self.detalizationControl.selectedSegmentIndex  forKey:kSettingsDetalization];
-    [userDefaults setFloat:self.musicSlider.value  forKey:kSettingsMusic];
-    [userDefaults setFloat:self.volumeSlider.value forKey:kSettingsVolume];
-    [userDefaults setInteger:self.complexityControl.selectedSegmentIndex  forKey:kSettingsComplexity];
-    
-    [userDefaults synchronize];
-}
-
-
--(void)saveRegistration{
-    
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    
+    [userDefaults setFloat:self.musicSlider.value                           forKey:kSettingsMusic];
+    [userDefaults setFloat:self.volumeSlider.value                          forKey:kSettingsVolume];
+    [userDefaults setInteger:self.complexityControl.selectedSegmentIndex    forKey:kSettingsComplexity];
+    [userDefaults setBool:self.parentControlSwitch.isOn                     forKey:kSettingsParentControl];
     
     [userDefaults setObject:self.firstNameField.text forKey:kSettingsFirstName];
-   
+    
     [userDefaults setObject:self.lastNameField.text forKey:kSettingsLastName];
     
     [userDefaults setObject:self.loginField.text forKey:kSettingsLogin];
@@ -78,17 +71,18 @@ static NSString* kSettingsComplexity   = @"Complexity "  ;
     [userDefaults synchronize];
 }
 
--(void)loadSavings{
+
+-(void)loadSettings{
     
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    self.shadowsSwitch.on     = [userDefaults boolForKey:kSettingsShadows];
+
+    self.shadowsSwitch.on                         = [userDefaults boolForKey:kSettingsShadows];
     self.detalizationControl.selectedSegmentIndex = [userDefaults integerForKey:kSettingsDetalization];
-    self.musicSlider.value    = [userDefaults floatForKey:kSettingsMusic];
-    self.volumeSlider.value   = [userDefaults floatForKey:kSettingsVolume];
-    self.complexityControl.selectedSegmentIndex = [userDefaults integerForKey:kSettingsComplexity];
+    self.musicSlider.value                        = [userDefaults floatForKey:kSettingsMusic];
+    self.volumeSlider.value                       = [userDefaults floatForKey:kSettingsVolume];
+    self.complexityControl.selectedSegmentIndex   = [userDefaults integerForKey:kSettingsComplexity];
+    self.parentControlSwitch.on                   = [userDefaults boolForKey:kSettingsParentControl];
     
-  
     self.firstNameField.text    = [userDefaults objectForKey:kSettingsFirstName];
     self.lastNameField.text     = [userDefaults stringForKey:kSettingsLastName];
     self.loginField.text        = [userDefaults objectForKey:kSettingsLogin];
@@ -96,6 +90,7 @@ static NSString* kSettingsComplexity   = @"Complexity "  ;
     self.ageField.text          = [userDefaults objectForKey:kSettingsAge];
     self.phoneNumberField.text  = [userDefaults stringForKey:kSettingsPhoneNumber];
     self.emailField.text        = [userDefaults stringForKey:kSettingsEmail];
+
 }
 
 #pragma  mark - Actions
@@ -107,7 +102,7 @@ static NSString* kSettingsComplexity   = @"Complexity "  ;
 
 - (IBAction)actionTextChanged:(UITextField *)sender {
     
-    [self saveRegistration];
+    [self saveSettings];
     
 }
 

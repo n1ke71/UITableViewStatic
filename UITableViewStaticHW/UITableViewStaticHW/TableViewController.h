@@ -49,6 +49,9 @@ typedef enum {
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *complexityControl;
 
+@property (weak, nonatomic) IBOutlet UISwitch *parentControlSwitch;
+
+
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *registrationFields;
 
 - (IBAction)actionValueChanged:(id)sender;
