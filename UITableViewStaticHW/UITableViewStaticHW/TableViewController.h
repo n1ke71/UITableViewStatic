@@ -19,11 +19,11 @@ typedef enum {
     RegistrationFieldPhoneNumber,
     RegistrationFieldEmail,
     
-}RegistrationField;
+} RegistrationField;
 
 @interface TableViewController : UITableViewController <UITextFieldDelegate>
 
-@property(assign,nonatomic) RegistrationField currentRegistrationField;
+@property (assign, nonatomic) RegistrationField currentRegistrationField;
 
 @property (weak, nonatomic) IBOutlet UITextField *firstNameField;
 
