@@ -9,31 +9,32 @@
 #import "TableViewController.h"
 
 static NSString *kSettingsFirstName = @"FirstName";
-static NSString *kSettingsLastName = @"LastName ";
+static NSString *kSettingsLastName = @"LastName";
 static NSString *kSettingsLogin = @"Login";
-static NSString *kSettingsPassword = @"Password ";
-static NSString *kSettingsAge = @"Age ";
+static NSString *kSettingsPassword = @"Password";
+static NSString *kSettingsAge = @"Age";
 static NSString *kSettingsPhoneNumber = @"PhoneNumber";
-static NSString *kSettingsEmail = @"Email ";
+static NSString *kSettingsEmail = @"Email";
 static NSString *kSettingsShadows = @"Shadows";
-static NSString *kSettingsDetalization = @"Detalization ";
-static NSString *kSettingsVolume = @"Volume ";
-static NSString *kSettingsMusic = @"Music ";
-static NSString *kSettingsComplexity = @"Complexity ";
-static NSString *kSettingsParentControl = @"ParentControl ";
+static NSString *kSettingsDetalization = @"Detalization";
+static NSString *kSettingsVolume = @"Volume";
+static NSString *kSettingsMusic = @"Music";
+static NSString *kSettingsComplexity = @"Complexity";
+static NSString *kSettingsParentControl = @"ParentControl";
 
 @interface TableViewController ()
+@property (nonatomic, strong) NSUserDefaults *userDefaults;
 
 @end
+
 
 @implementation TableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
+    self.userDefaults = [NSUserDefaults standardUserDefaults];
     [self loadSettings];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -45,81 +46,67 @@ static NSString *kSettingsParentControl = @"ParentControl ";
 
 - (void)saveSettings {
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [self.userDefaults setBool: self.shadowsSwitch.isOn forKey:kSettingsShadows];
+    [self.userDefaults setInteger: self.detalizationControl.selectedSegmentIndex forKey:kSettingsDetalization];
+    [self.userDefaults setFloat: self.musicSlider.value forKey:kSettingsMusic];
+    [self.userDefaults setFloat: self.volumeSlider.value forKey:kSettingsVolume];
+    [self.userDefaults setInteger: self.complexityControl.selectedSegmentIndex forKey:kSettingsComplexity];
+    [self.userDefaults setBool: self.parentControlSwitch.isOn forKey:kSettingsParentControl];
     
-    [userDefaults setBool:self.shadowsSwitch.isOn forKey:kSettingsShadows];
-    [userDefaults setInteger:self.detalizationControl.selectedSegmentIndex forKey:kSettingsDetalization];
-    [userDefaults setFloat:self.musicSlider.value forKey:kSettingsMusic];
-    [userDefaults setFloat:self.volumeSlider.value forKey:kSettingsVolume];
-    [userDefaults setInteger:self.complexityControl.selectedSegmentIndex forKey:kSettingsComplexity];
-    [userDefaults setBool:self.parentControlSwitch.isOn forKey:kSettingsParentControl];
+    [self.userDefaults setObject: self.firstNameField.text forKey:kSettingsFirstName];
+    [self.userDefaults setObject: self.lastNameField.text forKey:kSettingsLastName];
+    [self.userDefaults setObject: self.loginField.text forKey:kSettingsLogin];
+    [self.userDefaults setObject: self.passwordField.text forKey:kSettingsPassword];
+    [self.userDefaults setObject: self.ageField.text forKey:kSettingsAge];
+    [self.userDefaults setObject: self.phoneNumberField.text forKey:kSettingsPhoneNumber];
+    [self.userDefaults setObject: self.emailField.text forKey:kSettingsEmail];
     
-    [userDefaults setObject:self.firstNameField.text forKey:kSettingsFirstName];
-    [userDefaults setObject:self.lastNameField.text forKey:kSettingsLastName];
-    [userDefaults setObject:self.loginField.text forKey:kSettingsLogin];
-    [userDefaults setObject:self.passwordField.text forKey:kSettingsPassword];
-    [userDefaults setObject:self.ageField.text forKey:kSettingsAge];
-    [userDefaults setObject:self.phoneNumberField.text forKey:kSettingsPhoneNumber];
-    [userDefaults setObject:self.emailField.text forKey:kSettingsEmail];
-    
-    [userDefaults synchronize];
+    [self.userDefaults synchronize];
 }
 
 
 - (void)loadSettings {
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    self.shadowsSwitch.on = [self.userDefaults boolForKey:kSettingsShadows];
+    self.detalizationControl.selectedSegmentIndex = [self.userDefaults integerForKey:kSettingsDetalization];
+    self.musicSlider.value = [self.userDefaults floatForKey:kSettingsMusic];
+    self.volumeSlider.value = [self.userDefaults floatForKey:kSettingsVolume];
+    self.complexityControl.selectedSegmentIndex = [self.userDefaults integerForKey:kSettingsComplexity];
+    self.parentControlSwitch.on = [self.userDefaults boolForKey:kSettingsParentControl];
     
-    self.shadowsSwitch.on = [userDefaults boolForKey:kSettingsShadows];
-    self.detalizationControl.selectedSegmentIndex = [userDefaults integerForKey:kSettingsDetalization];
-    self.musicSlider.value = [userDefaults floatForKey:kSettingsMusic];
-    self.volumeSlider.value = [userDefaults floatForKey:kSettingsVolume];
-    self.complexityControl.selectedSegmentIndex = [userDefaults integerForKey:kSettingsComplexity];
-    self.parentControlSwitch.on = [userDefaults boolForKey:kSettingsParentControl];
-    
-    self.firstNameField.text = [userDefaults objectForKey:kSettingsFirstName];
-    self.lastNameField.text = [userDefaults stringForKey:kSettingsLastName];
-    self.loginField.text = [userDefaults objectForKey:kSettingsLogin];
-    self.passwordField.text = [userDefaults stringForKey:kSettingsPassword];
-    self.ageField.text = [userDefaults objectForKey:kSettingsAge];
-    self.phoneNumberField.text = [userDefaults stringForKey:kSettingsPhoneNumber];
-    self.emailField.text = [userDefaults stringForKey:kSettingsEmail];
+    self.firstNameField.text = [self.userDefaults objectForKey:kSettingsFirstName];
+    self.lastNameField.text = [self.userDefaults stringForKey:kSettingsLastName];
+    self.loginField.text = [self.userDefaults objectForKey:kSettingsLogin];
+    self.passwordField.text = [self.userDefaults stringForKey:kSettingsPassword];
+    self.ageField.text = [self.userDefaults objectForKey:kSettingsAge];
+    self.phoneNumberField.text = [self.userDefaults stringForKey:kSettingsPhoneNumber];
+    self.emailField.text = [self.userDefaults stringForKey:kSettingsEmail];
     
 }
 
 #pragma  mark - Actions
 
 - (IBAction)actionValueChanged:(id)sender {
-    
     [self saveSettings];
 }
 
 - (IBAction)actionTextChanged:(UITextField *)sender {
-    
     [self saveSettings];
-    
 }
 
 #pragma  mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
-    self.currentRegistrationField = (int) [self.registrationFields indexOfObject:textField];
-    
+    self.currentRegistrationField = (RegistrationField) [self.registrationFields indexOfObject:textField];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
-    
     if ([textField isEqual:[self.registrationFields lastObject]]) {
-        
         [[self.registrationFields lastObject] resignFirstResponder];
-        
     } else {
-        
         NSUInteger index = [self.registrationFields indexOfObject:textField];
-        [[self.registrationFields objectAtIndex:index + 1] becomeFirstResponder];
-        
+        [self.registrationFields[index + 1] becomeFirstResponder];
     }
     
     return YES;
@@ -127,41 +114,40 @@ static NSString *kSettingsParentControl = @"ParentControl ";
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
-    
     BOOL shouldChange = YES;
     
-    
-    if (self.currentRegistrationField == RegistrationFieldFirstName) {
-        
-        shouldChange = [self textFirstLastNameField:textField shouldChangeCharactersInRange:range replacementString:string];
-        
-    } else if (self.currentRegistrationField == RegistrationFieldLastName) {
-        
-        shouldChange = [self textFirstLastNameField:textField shouldChangeCharactersInRange:range replacementString:string];
-        
-        
-    } else if (self.currentRegistrationField == RegistrationFieldLogin) {
-        
-        shouldChange = [self textLoginField:textField shouldChangeCharactersInRange:range replacementString:string];
-        
-    } else if (self.currentRegistrationField == RegistrationFieldPassword) {
-        
-        shouldChange = [self textPasswordField:textField shouldChangeCharactersInRange:range replacementString:string];
-        
-    } else if (self.currentRegistrationField == RegistrationFieldAge) {
-        
-        shouldChange = [self textAgeField:textField shouldChangeCharactersInRange:range replacementString:string];
-        
-    } else if (self.currentRegistrationField == RegistrationFieldPhoneNumber) {
-        
-        shouldChange = [self textPhoneField:textField shouldChangeCharactersInRange:range replacementString:string];
-        
-    } else if (self.currentRegistrationField == RegistrationFieldEmail) {
-        
-        shouldChange = [self textEmailField:textField shouldChangeCharactersInRange:range replacementString:string];
-        
+    switch (self.currentRegistrationField) {
+        case RegistrationFieldFirstName:
+        case RegistrationFieldLastName:
+            shouldChange = [self shouldValidateText:textField.text
+                                  replacementString:string
+                                          maxLength:15
+                                          isDigital:NO];
+            break;
+            
+        case RegistrationFieldLogin:
+        case RegistrationFieldPassword:
+            shouldChange = [self registrationTextField:textField
+                         shouldChangeCharactersInRange:range
+                                     replacementString:string];
+            break;
+        case RegistrationFieldAge:
+            shouldChange = [self shouldValidateText:textField.text
+                                  replacementString:string
+                                          maxLength:1
+                                          isDigital:YES];
+            break;
+        case RegistrationFieldPhoneNumber:
+            shouldChange = [self textPhoneField:textField
+                  shouldChangeCharactersInRange:range
+                              replacementString:string];
+            break;
+        case RegistrationFieldEmail:
+            shouldChange = [self textEmailField:textField
+                  shouldChangeCharactersInRange:range
+                              replacementString:string];
+            break;
     }
-    
     
     return shouldChange;
 }
@@ -169,41 +155,13 @@ static NSString *kSettingsParentControl = @"ParentControl ";
 
 #pragma mark - Fields Validation
 
-- (BOOL)textFirstLastNameField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    BOOL shouldChange = YES;
-    
-    static const int nameMaxLength = 15;
-    
+- (BOOL)shouldValidateText:(NSString *)text replacementString:(NSString *)replacementString maxLength:(int)maxLength isDigital:(int)isDigital {
     NSCharacterSet *validationSet = [NSCharacterSet decimalDigitCharacterSet];
-    
-    NSArray *components = [string componentsSeparatedByCharactersInSet:validationSet];
-    
-    if (([components count] > 1) | ([textField.text length] > nameMaxLength)) {
-        
-        shouldChange = NO;
+    if (isDigital) {
+        validationSet = [validationSet invertedSet];
     }
-    
-    return shouldChange;
-}
-
-
-- (BOOL)textAgeField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    static const int ageMaxLength = 1;
-    
-    NSCharacterSet *validationSet = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    
-    NSArray *components = [string componentsSeparatedByCharactersInSet:validationSet];
-    
-    if (([components count] > 1) | ([textField.text length] > ageMaxLength)) {
-        
-        return NO;
-    }
-    
-    
-    return YES;
-    
+    NSArray *components = [replacementString componentsSeparatedByCharactersInSet:validationSet];
+    return [components count] <= 1 && [text length] <= maxLength;
 }
 
 - (BOOL)textPhoneField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -247,7 +205,7 @@ static NSString *kSettingsParentControl = @"ParentControl ";
     
     if (localNumberLength > 0) {
         
-        NSString *number = [newString substringFromIndex:(int) [newString length] - localNumberLength];
+        NSString *number = [newString substringFromIndex:(NSUInteger) [newString length] - localNumberLength];
         
         [resultString appendString:number];
         
@@ -302,82 +260,34 @@ static NSString *kSettingsParentControl = @"ParentControl ";
     static const int localPartMaxLength = 10;
     static const int serverPartMaxLength = 10;
     
-    BOOL shouldChange = YES;
-    
     static NSString *symbolsString = @"!#$%&'*+-/=?^_`{|}~[],";
     
     NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
     NSCharacterSet *symbolsSet = [NSCharacterSet characterSetWithCharactersInString:symbolsString];
-    
     NSArray *components = [newString componentsSeparatedByCharactersInSet:symbolsSet];
     
-    if ([components count] > 1) {
-        
-        shouldChange = NO;
-    }
-    
-    if (([newString length] == 1) && ([string isEqualToString:@"@"] || [string isEqualToString:@"."])) {
-        
-        shouldChange = NO;
-    }
-    
-    
-    NSCharacterSet *atSymbolSet = [NSCharacterSet characterSetWithCharactersInString:@"@"];
-    
-    NSArray *validAtComponents = [newString componentsSeparatedByCharactersInSet:atSymbolSet];
-    
-    if ([validAtComponents count] > 2) {
-        
-        shouldChange = NO;
-    }
-    
-    NSCharacterSet *pointSymbolSet = [NSCharacterSet characterSetWithCharactersInString:@"."];
-    
-    NSArray *validPointComponents = [newString componentsSeparatedByCharactersInSet:pointSymbolSet];
-    
-    if ([validPointComponents count] > 2) {
-        
-        shouldChange = NO;
-    }
-    
-    
-    if ([newString length] > localPartMaxLength + serverPartMaxLength) {
-        
-        shouldChange = NO;
-    }
-    
-    
+    BOOL shouldChange;
+    shouldChange = [components count] <= 1;
+    shouldChange = !(([newString length] == 1) && ([string isEqualToString:@"@"] || [string isEqualToString:@"."]));
+    shouldChange = [self check:newString byCharacter: @"@"];
+    shouldChange = [self check:newString byCharacter: @"."];
+    shouldChange = [newString length] <= localPartMaxLength + serverPartMaxLength;
     return shouldChange;
     
 }
 
-- (BOOL)textLoginField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    BOOL shouldChange = YES;
-    
-    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    if ([newString length] > 16) {
-        
-        shouldChange = NO;
-    }
-    
-    return shouldChange;
+- (BOOL)check:(NSString *)string byCharacter: (NSString *) str {
+    NSCharacterSet *atSymbolSet = [NSCharacterSet characterSetWithCharactersInString:str];
+    NSArray *validAtComponents = [string componentsSeparatedByCharactersInSet:atSymbolSet];
+    return [validAtComponents count] <= 2;
 }
 
-- (BOOL)textPasswordField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    BOOL shouldChange = YES;
+- (BOOL)registrationTextField:(UITextField *)textField
+shouldChangeCharactersInRange:(NSRange)range
+            replacementString:(NSString *)string {
     
     NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    if ([newString length] > 16) {
-        
-        shouldChange = NO;
-    }
-    
-    return shouldChange;
+    return [newString length] <= 16;
 }
 
 
